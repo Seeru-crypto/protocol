@@ -5,21 +5,25 @@ const region = 'norwayeast';
 const baseURL = `https://${region}.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1`;
 const languageOption = 'et-EE';
 const fullUrl = baseURL + '?language=' + languageOption;
-const key = 'e3f373f2939b4444814c9e0b5b5cae8f';
+const key = '';
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     let response;
-    log('query', req.query);
-    log(req.body.file === undefined, typeof req.body.file);
-    const soundfile: File = JSON.parse(req.body.file);
-    log('soundfile', soundfile.name);
+    const body = req.body;
+    console.log('body: ', typeof body);
+    if (!body.title || body.soundFile) {
+        return res.status(400).json({ data: 'title or file not found' });
+    }
+    log(body.soundFile);
+    log(body.title);
+
     // https://norwayeast.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=et-EE
     await fetch(fullUrl, {
         method: 'POST',
-        body: soundfile,
+        body: req.body,
         headers: {
             'Content-type': 'audio/wav',
             'Ocp-Apim-Subscription-Key': key,

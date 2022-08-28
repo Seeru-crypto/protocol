@@ -1,18 +1,13 @@
 export async function TranscribeSoundFile(file: File) {
     let response;
     const baseURL = 'http://localhost:3000/api/BackService';
-    const jsonFile = new Blob([JSON.stringify(file)], {
-        type: 'application/json',
-    });
-    const jsonData = { title: 'A file title', soundFile: JSON.stringify(file) };
+    const formData = new FormData();
+    formData.append('soundfile', file); // a .wav sound file
+    formData.append('title', 'sound file title');
 
     await fetch(baseURL, {
         method: 'POST',
-        body: JSON.stringify(jsonData),
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
+        body: formData,
     })
         .then((requestPromise) => {
             if (!requestPromise.ok)
