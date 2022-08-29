@@ -1,3 +1,4 @@
+import { decode as base64_decode } from 'base-64';
 import { log } from 'console';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -13,17 +14,28 @@ export default async function handler(
 ) {
     let response;
     const body = req.body;
+
     console.log('body: ', typeof body);
-    if (!body.title || body.soundFile) {
+    if (!body.title || !body.soundFile) {
         return res.status(400).json({ data: 'title or file not found' });
     }
-    log(body.soundFile);
-    log(body.title);
+    const decodedFile = base64_decode(body.soundFile);
+
+    const parts = [
+        new Blob([decodedFile], {
+            type: '.wav',
+        }),
+        new Uint16Array([33]),
+    ];
+
+    const file: File = new File(parts, 'sample.txt', {
+        type: '.wav',
+    });
 
     // https://norwayeast.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1?language=et-EE
     await fetch(fullUrl, {
         method: 'POST',
-        body: req.body,
+        body: file,
         headers: {
             'Content-type': 'audio/wav',
             'Ocp-Apim-Subscription-Key': key,
