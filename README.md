@@ -1,3 +1,21 @@
+# Project Protocol
+
+## Description
+
+The goal of this project is to implement a spech-to-text wen app, which inputs a .wav file
+and displays the conversation content on the screen.
+
+With the additional features of callucalting WER (word error rating, if the user has a accurate transcription of the conversation)
+
+## Status
+
+-   Currently a link has been made to azure STT servies and works with some .wer files but not others. Needs to Spiked why
+-   Need to be tested how it performs with different length files.
+-   Azure SDK does not work for some reason.
+-   No auth functionality has been implemented, but some setup has been made thanks to T3 stack.
+-   No wer calculation functionality has been implemented.
+-
+
 # Create T3 App
 
 This is an app bootstrapped according to the [init.tips](https://init.tips) stack, also known as the T3-Stack.
